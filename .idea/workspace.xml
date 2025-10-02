@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7a70115d-b84d-4069-8fab-0d93312782d4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/XbarMath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/XbarMath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/XbarLab.xls" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +71,7 @@
       <workItem from="1759239856351" duration="3000" />
       <workItem from="1759242128569" duration="1718000" />
       <workItem from="1759347530370" duration="52000" />
+      <workItem from="1759410304931" duration="2352000" />
     </task>
     <servers />
   </component>
