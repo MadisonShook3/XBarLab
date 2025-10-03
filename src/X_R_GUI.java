@@ -14,103 +14,60 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class X_R_GUI extends Application {
-  private double[] fileArray;//holds raw values from the file
-  private double[] cusumArray;//holds values after cusum
+  private double[][] averages;
 
   public void start(Stage primaryStage) {
-    //Set up axis for line chart
     NumberAxis xAxis = new NumberAxis();
     xAxis.setLabel("Point");
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Values");
+
+    NumberAxis xAxis2 = new NumberAxis();
+    xAxis2.setLabel("Point");
+    NumberAxis yAxis2 = new NumberAxis();
+    yAxis2.setLabel("Values");
+
     //Set up the actual chart
-    LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-    lineChart.setTitle("CUSUM Chart");
-    lineChart.setStyle("-fx-background-color: lightgray");
+    LineChart<Number, Number> rangeChart = new LineChart<>(xAxis, yAxis);
+    rangeChart.setPrefSize(600,800);
+    LineChart<Number, Number> averageChart = new LineChart<>(xAxis2, yAxis2);
+    averageChart.setPrefSize(600,800);
+    averageChart.setTitle("Average Chart");
+    averageChart.setStyle("-fx-background-color: lightgray");
+    rangeChart.setTitle("Range Chart");
+    rangeChart.setStyle("-fx-background-color: lightgray");
 
-    XYChart.Series<Number, Number> CUSUM_Data = new XYChart.Series<>();
-    CUSUM_Data.setName("CUSUM");//red line
+    XYChart.Series<Number, Number> rangeData = new XYChart.Series<>();
+    rangeData.setName("range data");//red line
+    rangeData.getData().add(new XYChart.Data<>(0,10));
 
-    XYChart.Series<Number, Number> originalData = new XYChart.Series<>();
-    originalData.setName("Data set");//orange line
+    XYChart.Series<Number, Number> rangeAverage = new XYChart.Series<>();
+    rangeAverage.setName("range average");//orange line
+    rangeAverage.getData().add(new XYChart.Data<>(5,11));
+    rangeAverage.getData().add(new XYChart.Data<>(10,15));
+
+    XYChart.Series<Number, Number> averageData = new XYChart.Series<>();
+    averageData.setName("average data");//red line
+    averageData.getData().add(new XYChart.Data<>(0,10));
+
+    XYChart.Series<Number, Number> averageAverage = new XYChart.Series<>();
+    averageAverage.setName("average");//orange line
+    averageAverage.getData().add(new XYChart.Data<>(5,11));
+    averageAverage.getData().add(new XYChart.Data<>(10,15));
+
 
     //Add both to the chart
-    lineChart.getData().add(CUSUM_Data);
-    lineChart.getData().add(originalData);
+    rangeChart.getData().add(rangeData);
+    rangeChart.getData().add(rangeAverage);
+    averageChart.getData().add(averageData);
+    averageChart.getData().add(averageAverage);
 
-    //Used to create side panel
-    VBox sidePane = new VBox(10);
-    sidePane.setStyle("-fx-background-color: lightgray");
-
-    //Make buttons/textFields on the side panel
-    Label bootstrapLabel = new Label("Bootstraps: ");
-    Label confidenceLabel = new Label("Confidence % (ex. 95): ");
-    Label fileNameLabel = new Label("File name: ");
-    TextField bootStrapText = new TextField();
-    TextField confidenceText = new TextField();
-    TextField textFile = new TextField();
-    Button applyButton = new Button("apply");
-    Button exitButton = new Button("exit");
-
-    //Actions for the apply button
-    applyButton.setOnAction(e -> {
-      //Get user inputs
-      int numBootstraps = Integer.parseInt(bootStrapText.getText());
-      double confidenceLevel = Double.parseDouble(confidenceText.getText()) / 100.0;
-      String fileName = textFile.getText();
-
-      //clear previous data
-      CUSUM_Data.getData().clear();
-      originalData.getData().clear();
-
-      try {
-        this.fileArray = FileReader.extractData(fileName);
-
-        //Make sure confidence level is in the correct range
-        CusumMath cusumMath = null;
-        if((confidenceLevel*100) >=0 && (confidenceLevel*100) <= 100) {
-          cusumMath = new CusumMath(numBootstraps, confidenceLevel);
-        }else{
-          System.out.println("Invalid confidence level\nExiting...");
-          System.exit(0);
-        }
-
-        this.cusumArray = cusumMath.cusum(fileArray);
-
-        //Change point detection
-        ArrayList<CusumMath.ChangePoint> changePoints = cusumMath.findChanges(fileArray);
-        for (CusumMath.ChangePoint c : changePoints) {
-          System.out.println("Change point at: " + c.index() +
-                  " With Confidence: " + c.confidence());
-        }
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
-
-      //Plot cusum and original data values
-      for (int i = 0; i < cusumArray.length; i++) {
-        CUSUM_Data.getData().add(new XYChart.Data<>(i+1, cusumArray[i]));
-      }
-      for (int i = 0; i < fileArray.length; i++) {
-        originalData.getData().add(new XYChart.Data<>(i+1, fileArray[i]));
-      }
-    });
-
-    //Quit program
-    exitButton.setOnAction(e -> {
-      System.exit(0);
-    });
-
-    //Add buttons/textFields to the side panel
-    sidePane.getChildren().addAll(bootstrapLabel, bootStrapText, confidenceLabel,confidenceText, fileNameLabel,textFile,applyButton,exitButton);
-
-    //Set layout
     BorderPane root = new BorderPane();
-    root.setCenter(lineChart);
-    root.setLeft(sidePane);
+    root.setRight(averageChart);
+    root.setLeft(rangeChart);
 
     //Build scene and show
-    Scene scene = new Scene(root, 800, 600);
+    Scene scene = new Scene(root, 1200, 800);
     primaryStage.setScene(scene);
     primaryStage.show();
   }
