@@ -1,13 +1,17 @@
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Arrays;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class Main extends Application {
+  @Override
+  public void start(Stage stage) {
+    RSCharts ui = new RSCharts();
+    stage.setTitle("R & S Charts (n=10) — CSV");
+    stage.setScene(new Scene(ui.getRoot(), 1100, 600));
+    stage.show();
+  }
 
-public class Main {
-  public static void main(String[] args) throws IOException {
-    X_R_GUI.main(args);
+  public static void main(String[] args) {
+    launch(args);
   }
 }
-
