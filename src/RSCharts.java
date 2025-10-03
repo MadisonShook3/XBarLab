@@ -27,7 +27,7 @@ public class RSCharts {
   private static final Map<Integer, Double> B4 = Map.of(10, 1.716);
 
   private final BorderPane root = new BorderPane();
-  private final TextField pathField = new TextField("XbarData.csv");
+  private final TextField pathField = new TextField("put csv file name here");
   private final Button loadBtn = new Button("Load");
   private final Label status = new Label();
   private final TextArea summary = new TextArea();
